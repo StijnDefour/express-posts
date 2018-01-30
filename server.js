@@ -2,8 +2,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient
+const request = require('request');
 
-var url = "http://jsonplaceholder.typicode.com/posts"
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('Listening on port 3000')
@@ -21,13 +21,8 @@ app.get('/', (req, res) => {
 
 // List all posts
 app.get('/posts', (req, res) => {
-  /*db.collection('posts').find().toArray((err, result) => {
-    if (err) return console.log(err)
-    res.render('posts.ejs', {posts: result})
-  })*/
-
   request({
-    url: 'url',
+    url: 'http://jsonplaceholder.typicode.com/posts',
     json: true
   }, function(err, response, body) {
     if (err) return console.log(err)
@@ -43,17 +38,24 @@ app.get('/search', (req, res) => {
 
 // Find all comments for post
 app.post('/search', (req, res) => {
-  var query = { name: req.body.title }
+  var query = req.body.title;
   /*db.collection('posts').find(query).toArray(function(err, result) {
     if (err) return console.log(err)
     if (result != '') res.render('search_result.ejs', { post: result[0] })
   });*/
 
   request({
-    url: 'url',
+    url: 'http://jsonplaceholder.typicode.com/posts',
     json: true
   }, function(err, response, body) {
+    if (err) return console.log(err)
 
-  }
+    var i = posts.length;
+    while (i == posts.length || query == body[i]) {
+      i++;
+    }
+
+    if (i != posts.length) res.render('search_result.ejs', { post: body[i] })
+  });
 
 });
