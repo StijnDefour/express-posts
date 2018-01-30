@@ -33,7 +33,7 @@ app.get('/posts', (req, res) => {
 
 // Show the search form
 app.get('/search', (req, res) => {
-   res.render('search.ejs', { post: '' });
+   res.render('search.ejs', { posts: '' });
 });
 
 // Find all comments for post
@@ -50,12 +50,20 @@ app.post('/search', (req, res) => {
   }, function(err, response, body) {
     if (err) return console.log(err)
 
-    var i = posts.length;
-    while (i == posts.length || query == body[i]) {
+    var result = -1;
+
+    var i = 0;
+    while (i < body.length) {
+      if (query == body[i].title) {
+        result = i;
+      }
       i++;
     }
 
-    if (i != posts.length) res.render('search_result.ejs', { post: body[i] })
+    if (result != -1) {
+      console.log(body[0].title);
+      res.render('search_result.ejs', { post: body[result] })
+    }
   });
 
 });
